@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "build-ci": "yarn size:build",
-    "components": "yarn workspace @kiwicom/orbit-components",
+    "components": "yarn workspace @kiwicom/orbit-components",asf
     "checks": "node --loader ts-node/esm scripts/checks.mts",
     "check:types": "yarn checks --types",
     "check:links": "yarn checks --links",
