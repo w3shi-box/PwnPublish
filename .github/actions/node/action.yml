@@ -1,5 +1,5 @@
-name: Node
-description: "Installs and caches Node dependencies and Cypress"
+name: Minimal Node Setup
+description: "Minimal safe Node.js action—sets up Node and installs dependencies"
 runs:
   using: "composite"
   steps:
@@ -7,21 +7,5 @@ runs:
       with:
         node-version: "22"
 
-    - name: Restore cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          **/node_modules
-          !**/node_modules/@kiwicom/**
-          ~/.cache/Cypress
-        key: node-modules-${{ github.ref}}-${{ hashFiles('**/yarn.lock', '.yarnclean') }}
-        restore-keys: |
-          node-modules-${{ github.ref}}-
-
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile
-      shell: bash
-
-    - name: Install docs dependencies
-      run: cd docs && yarn install --frozen-lockfile
+    - run: yarn install --frozen-lockfile
       shell: bash
