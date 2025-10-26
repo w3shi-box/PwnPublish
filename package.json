@@ -1,7 +1,7 @@
 {
   "name": "@kiwicom/orbit",
   "private": true,
-  "workspaces": [
+  "workspaces": [sfdg
     "packages/*"
   ],
   "scripts": {
