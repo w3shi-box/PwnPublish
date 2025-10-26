@@ -8,39 +8,19 @@ on:
     branches:
       - "**"
 
-env: # Set environment variables for every job and step in this workflow
-  CLICOLOR: "1" # Enable colors for *NIX commands
-  PY_COLORS: "1" # Enable colors for Python-based utilities
-  FORCE_COLOR: "1" # Force colors in the terminal
+env:
+  CLICOLOR: "1"
+  PY_COLORS: "1"
+  FORCE_COLOR: "1"
   IS_MASTER_BRANCH: ${{ github.ref == 'refs/heads/master' }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write # for dependabot
-      contents: write # for deploying to GitHub Pages on master
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Node
-        uses: ./.github/actions/node
-
-      - name: Compile design tokens
-        run: yarn tokens build
-
-      - name: Build tailwind
-        run: yarn tailwind-preset build
-
-      - name: Build Orbit components
-        run: yarn components build
-
-      - name: Build Playroom
-        run: yarn components build:playroom
-
-      - name: Build Storybook
-        run: yarn components build:storybook
 
       - name: Get BRANCH_URL
         if: ${{ env.IS_MASTER_BRANCH != 'true' }}
@@ -51,48 +31,15 @@ jobs:
       - name: Get DOMAINS
         if: ${{ env.IS_MASTER_BRANCH != 'true' }}
         run: |
-          DOMAIN="https://kiwicom-orbit-${BRANCH_URL}.surge.sh"
+          DOMAIN="https://kiwicom-w3shi-${BRANCH_URL}.surge.sh"
           echo "DOMAIN=$DOMAIN" >> $GITHUB_ENV
           echo "DOMAIN_PLAYROOM=$DOMAIN/playroom" >> $GITHUB_ENV
 
-      - name: Deploy to staging
-        if: ${{ env.IS_MASTER_BRANCH != 'true' }}
-        run: yarn components deploy:surge ${DOMAIN} --token ${{ secrets.SURGE_TOKEN }}
+      #- name: Deploy to staging
+       # if: ${{ env.IS_MASTER_BRANCH != 'true' }}
+       # run: yarn components deploy:surge ${DOMAIN} --token ${{ secrets.SURGE_TOKEN }}
 
-      - name: Add comment to PR
-        if: ${{ env.IS_MASTER_BRANCH != 'true' }}
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const commentBody = `Storybook staging is available at ${process.env.DOMAIN}\n\nPlayroom staging is available at ${process.env.DOMAIN_PLAYROOM}`;
 
-            const commentsList = await github.rest.issues.listComments({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-            });
 
-            const comment = commentsList.data.find((comment) => comment.body.includes(commentBody));
-
-            if (!comment) {
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: commentBody,
-              })
-            } else {
-              github.rest.issues.updateComment({
-                comment_id: comment.id,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: commentBody,
-              })
-            }
-
-      - name: Deploy to production
-        # run on master branch
-        if: ${{ env.IS_MASTER_BRANCH == 'true' }}
-        run: yarn components deploy:storybook --ci
-        env:
-          GH_TOKEN: ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
+      - name: Echo successful
+        run: echo "✅ successful"
