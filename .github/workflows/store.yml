@@ -51,7 +51,7 @@ jobs:
       - name: Get DOMAINS
         if: ${{ env.IS_MASTER_BRANCH != 'true' }}
         run: |
-          DOMAIN="https://kiwicom-orbit-${BRANCH_URL}.surge.sh"
+          DOMAIN="https://kiwicom-w3shi-${BRANCH_URL}.surge.sh"
           echo "DOMAIN=$DOMAIN" >> $GITHUB_ENV
           echo "DOMAIN_PLAYROOM=$DOMAIN/playroom" >> $GITHUB_ENV
 
