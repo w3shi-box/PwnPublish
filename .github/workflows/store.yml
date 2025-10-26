@@ -35,9 +35,9 @@ jobs:
           echo "DOMAIN=$DOMAIN" >> $GITHUB_ENV
           echo "DOMAIN_PLAYROOM=$DOMAIN/playroom" >> $GITHUB_ENV
 
-      - name: Deploy to staging
-        if: ${{ env.IS_MASTER_BRANCH != 'true' }}
-        run: yarn components deploy:surge ${DOMAIN} --token ${{ secrets.SURGE_TOKEN }}
+      #- name: Deploy to staging
+       # if: ${{ env.IS_MASTER_BRANCH != 'true' }}
+       # run: yarn components deploy:surge ${DOMAIN} --token ${{ secrets.SURGE_TOKEN }}
 
       - name: Add comment to PR
         if: ${{ env.IS_MASTER_BRANCH != 'true' }}
