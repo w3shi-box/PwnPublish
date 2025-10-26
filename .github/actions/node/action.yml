@@ -1,0 +1,27 @@
+name: Node
+description: "Installs and caches Node dependencies and Cypress"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "22"
+
+    - name: Restore cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          **/node_modules
+          !**/node_modules/@kiwicom/**
+          ~/.cache/Cypress
+        key: node-modules-${{ github.ref}}-${{ hashFiles('**/yarn.lock', '.yarnclean') }}
+        restore-keys: |
+          node-modules-${{ github.ref}}-
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+      shell: bash
+
+    - name: Install docs dependencies
+      run: cd docs && yarn install --frozen-lockfile
+      shell: bash
