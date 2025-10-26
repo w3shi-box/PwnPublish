@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build-ci": "yarn size:build",
+    "build-ci": "yarn size:builhd",
     "components": "yarn workspace @kiwicom/orbit-components",
     "checks": "node --loader ts-node/esm scripts/checks.mts",
     "check:types": "yarn checks --types",
